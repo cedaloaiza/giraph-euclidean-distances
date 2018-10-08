@@ -13,21 +13,17 @@ import org.apache.hadoop.io.WritableUtils;
 
 public class PointValue implements Writable{
 	
-	public static final int NONE_PARENT = -1;
-	
-
-	
+		
 	private double x;
 	private double y;
-
-	
-
-
+	private int id;
+	private double[] distances;
 
 
-	public PointValue(double x, double y) {
+	public PointValue(double x, double y, int id) {
 		this.x = x;
 		this.y = y;
+		this.id = id;
 
 	}
 
@@ -36,6 +32,7 @@ public class PointValue implements Writable{
 		super();
 		this.x = 0;
 		this.y = 0;
+		this.id = -1;
 	}
 
 
@@ -52,6 +49,10 @@ public class PointValue implements Writable{
 	public double getY() {
 		return y;
 	}
+	
+	public int getId() {
+		return id;
+	}
 
 
 	public void setY(double y) {
@@ -59,11 +60,21 @@ public class PointValue implements Writable{
 	}
 
 	
+	public double[] getDistances() {
+		return distances;
+	}
+
+
+	public void setDistances(double[] distances) {
+		this.distances = distances;
+	}
+
 
 	@Override
 	public void write(DataOutput out) throws IOException {
 		out.writeDouble(x);
 		out.writeDouble(y);
+		out.writeInt(id);
 
 	}
 
@@ -71,6 +82,7 @@ public class PointValue implements Writable{
 	public void readFields(DataInput in) throws IOException {
 		x = in.readDouble();
 		y = in.readDouble();
+		id = in.readInt();
 
 		
 	}

@@ -62,7 +62,7 @@ public class PointsVertexInputFormat extends
     @Override
     protected PointValue getValue(JSONArray jsonVertex) throws
       	JSONException, IOException {
-      return new PointValue(jsonVertex.getDouble(1), jsonVertex.getDouble(2));
+      return new PointValue(jsonVertex.getDouble(1), jsonVertex.getDouble(2), jsonVertex.getInt(0));
     }
 
     @Override

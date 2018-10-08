@@ -9,8 +9,10 @@ import java.util.Random;
 import org.apache.giraph.master.MasterCompute;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.MapWritable;
 import org.apache.hadoop.io.Writable;
+import org.python.core.NewCompilerResources;
 
 
 
@@ -25,28 +27,8 @@ public class EmptyMasterCompute extends MasterCompute {
 	@Override
 	public void compute() {
 		
-		int superStepPhase =  (int) getSuperstep() % SUPER_STEPS_PER_ITERATION;
-		System.out.println("\n\n" + iteration );
-		System.out.println("Iteration/Movement: " + iteration);
-		System.out.println("***** Computation " +  superStepPhase + " *****");
-		System.out.println("Number of vertices: " + getTotalNumVertices());
-		System.out.println("***MASTER ***");
-		if (iteration < MAX_ITERARIONS) {		
-			switch (superStepPhase) {
-				case 0:
-					break;
-				case 1:
-					break;
-				case 2:
-					break;
-				case 3:
-					break;
-				case 4:
-					iteration++;
-					break;
-			}
-		} else {
-			haltComputation();
+		if (getSuperstep() == 1) {
+			broadcast("numVertices", new LongWritable(getTotalNumVertices()));
 		}
 	}
 
