@@ -19,7 +19,7 @@ public class EuclideanDistancesComputation extends
                 DoubleWritable, PointValue> {
     public void compute(Vertex<IntWritable, PointValue,
     		DoubleWritable> vertex, Iterable<PointValue> messages) throws IOException {
-    	int numVertices = 5;//18819;
+    	int numVertices = 75276;//18819;
     	
     	if (getSuperstep() == 0) {
     		System.out.println("Sending messages. Vertex id: " + vertex.getId());

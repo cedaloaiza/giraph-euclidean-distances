@@ -3,12 +3,8 @@ package ru.simple.giraph.project.org;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.HashMap;
-
-import org.apache.hadoop.io.ArrayPrimitiveWritable;
-import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.io.Writable;
-import org.apache.hadoop.io.WritableUtils;
+
 
 
 public class PointValue implements Writable{
