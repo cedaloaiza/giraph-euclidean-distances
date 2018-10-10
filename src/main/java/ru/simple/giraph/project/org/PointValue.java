@@ -66,7 +66,6 @@ public class PointValue implements Writable{
 	}
 
 
-	@Override
 	public void write(DataOutput out) throws IOException {
 		out.writeDouble(x);
 		out.writeDouble(y);
@@ -74,7 +73,6 @@ public class PointValue implements Writable{
 
 	}
 
-	@Override
 	public void readFields(DataInput in) throws IOException {
 		x = in.readDouble();
 		y = in.readDouble();

@@ -19,15 +19,22 @@ public class EuclideanDistancesComputation extends
                 DoubleWritable, PointValue> {
     public void compute(Vertex<IntWritable, PointValue,
     		DoubleWritable> vertex, Iterable<PointValue> messages) throws IOException {
-    	int numVertices = 75276;//18819;
+    	int numVertices = 13;//75276;//18819;
+    	int partitions = 6;
+    	int verticesPerPartition = numVertices / partitions;
+    	int startingVertex = verticesPerPartition*((int)getSuperstep()-1);
+    	if (((int)getSuperstep()-1) == partitions) {
+    		verticesPerPartition = numVertices % partitions;
+    	}
     	
     	if (getSuperstep() == 0) {
     		System.out.println("Sending messages. Vertex id: " + vertex.getId());
-    		for (int i = 0; i < numVertices; i++) {
+    		for (int i = startingVertex; i < startingVertex + verticesPerPartition; i++) {
     			//System.out.println("sending message to:" + i);
     			sendMessage(new IntWritable(i), vertex.getValue());
     		}
     	} else {
+    		
     		System.out.println("Computing messages. Vertex id: " + vertex.getId() + " " + vertex.getValue().getId() );
     		double[] distances = new double[numVertices];
     		for (PointValue point : messages) {

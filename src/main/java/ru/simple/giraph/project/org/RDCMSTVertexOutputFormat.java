@@ -23,7 +23,6 @@ public class RDCMSTVertexOutputFormat extends
    * Simple VertexWriter that supports {@link SimplePageRankComputation}
    */
   public class SimplePageRankVertexWriter extends TextVertexWriter {
-    @Override
     public void writeVertex(
         Vertex<IntWritable, PointValue, DoubleWritable> vertex)
       throws IOException, InterruptedException {
