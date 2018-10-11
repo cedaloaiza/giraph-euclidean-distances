@@ -16,34 +16,44 @@ import java.io.IOException;
 
 public class EuclideanDistancesComputation extends
         BasicComputation<IntWritable, PointValue,
-                DoubleWritable, PointValue> {
+                DoubleWritable, PointWritable> {
     public void compute(Vertex<IntWritable, PointValue,
-    		DoubleWritable> vertex, Iterable<PointValue> messages) throws IOException {
+    		DoubleWritable> vertex, Iterable<PointWritable> messages) throws IOException {
     	int numVertices = 13;//75276;//18819;
     	int partitions = 6;
     	int verticesPerPartition = numVertices / partitions;
-    	int startingVertex = verticesPerPartition*((int)getSuperstep()-1);
-    	if (((int)getSuperstep()-1) == partitions) {
+    	int iteration = (int) getSuperstep() / 2;
+    	int startingVertex = verticesPerPartition*iteration;
+    	if (iteration == partitions) {
     		verticesPerPartition = numVertices % partitions;
     	}
+    	System.out.println("Iteration: " + iteration);
     	
-    	if (getSuperstep() == 0) {
+    	
+    	if (getSuperstep() % 2 == 0) {
     		System.out.println("Sending messages. Vertex id: " + vertex.getId());
+    		System.out.println("from " + startingVertex + " to " +  (startingVertex + verticesPerPartition));
     		for (int i = startingVertex; i < startingVertex + verticesPerPartition; i++) {
     			//System.out.println("sending message to:" + i);
-    			sendMessage(new IntWritable(i), vertex.getValue());
+    			sendMessage(new IntWritable(i), new PointWritable(vertex.getValue().getX(),
+    					vertex.getValue().getY(), vertex.getId().get()));
     		}
     	} else {
-    		
     		System.out.println("Computing messages. Vertex id: " + vertex.getId() + " " + vertex.getValue().getId() );
-    		double[] distances = new double[numVertices];
-    		for (PointValue point : messages) {
-    			distances[point.getId()] = Point2D.distance(vertex.getValue().getX(), vertex.getValue().getY(), point.getX(), point.getY());
+    		if (vertex.getValue().getDistances() == null) {
+    			vertex.getValue().setDistances(new double[numVertices]);
+    		}
+    		for (PointWritable point : messages) {
+    			vertex.getValue().getDistances()[point.getId()]  = Point2D.distance(vertex.getValue().getX(), vertex.getValue().getY(), point.getX(), point.getY());	
+                //distances[point.getId()] = Point2D.distance(vertex.getValue().getX(), vertex.getValue().getY(), point.getX(), point.getY());
+    			
     			//System.out.println("THe distance from " + vertex.getId() + " to " + point.getId() + " is " + distances[point.getId()]);
 
         	}
-    		vertex.getValue().setDistances(distances);
-    		vertex.voteToHalt();
+    		//vertex.getValue().setDistances(distances);
+    		if (iteration == partitions) {
+    			vertex.voteToHalt();
+    		}
     	}
     }
 }
